@@ -4,11 +4,11 @@ import org.junit.Test;
 public class MainClassTest extends MainClass
 {
         @Test
-        public void testGetLocalNumber()
+        public void testGetClassNumber()
         {
-            int number = this.getLocalNumber();
-            int expected = 14;
+            int expected = 45;
+            int actual = this.getClassNumber();
 
-            Assert.assertTrue("Expected number != 14", number == expected);
+            Assert.assertTrue("Expected number <= 45 ", actual > expected);
         }
 }
