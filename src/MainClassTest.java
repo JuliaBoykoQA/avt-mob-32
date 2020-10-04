@@ -4,11 +4,14 @@ import org.junit.Test;
 public class MainClassTest extends MainClass
 {
         @Test
-        public void testGetClassNumber()
+        public void testGetClassString()
         {
-            int expected = 45;
-            int actual = this.getClassNumber();
+            String expected1 = "Hello";
+            String expected2 = "hello";
 
-            Assert.assertTrue("Expected number <= 45 ", actual > expected);
+            String actual = getClassString();
+
+            Assert.assertTrue("The expected result does not contain Hello or hello.",
+                    actual.contains(expected1) || actual.contains(expected2));
         }
 }
