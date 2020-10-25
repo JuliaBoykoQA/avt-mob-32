@@ -1,7 +1,6 @@
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -36,19 +35,37 @@ public class FirstTest {
     }
 
     @Test
-    public void checkingTextInInputField(){
+    public void checkingSearchResult(){
         waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Cannot find Search Wikipedia input",
                 10
         );
 
-        assertElementHasText(
-                By.id("org.wikipedia:id/search_src_text"),
-                "Search…",
-                "The expected text is not found."
+        waitForElementAndSentKeys(
+                By.xpath("//*[contains(@text,'Search…')]"),
+                "Hello",
+                "Cannot find search input",
+                10
         );
 
+        waitForElementPresent(
+                By.id("org.wikipedia:id/page_list_item_title"),
+                "No result found",
+                5
+        );
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_close_btn"),
+                "Cannot find X to cancel search",
+                5
+        );
+
+        waitForElementPresent(
+                By.id("org.wikipedia:id/search_empty_message"),
+                "Search results screen was not cleared",
+                5
+        );
     }
 
     private WebElement waitForElementPresent(By by, String error_massage, long timeoutInSeconds) {
@@ -65,9 +82,11 @@ public class FirstTest {
         return element;
     }
 
-    private void assertElementHasText(By by, String expected_text, String error_message){
-        WebElement element = waitForElementPresent(by, error_message, 20);
-        String element_text = element.getAttribute("text");
-        Assert.assertEquals(error_message, expected_text, element_text);
+    private WebElement waitForElementAndSentKeys(By by, String value, String error_message, long timeoutInSeconds) {
+        WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
+        element.sendKeys(value);
+        return element;
     }
 }
+
+
