@@ -1,6 +1,7 @@
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -35,7 +36,10 @@ public class FirstTest {
     }
 
     @Test
-    public void checkingSearchResult(){
+    public void checkingSearchResultByWord(){
+
+        String searchingText = "JAVA";
+
         waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Cannot find Search Wikipedia input",
@@ -44,28 +48,43 @@ public class FirstTest {
 
         waitForElementAndSentKeys(
                 By.xpath("//*[contains(@text,'Search…')]"),
-                "Hello",
+                searchingText,
                 "Cannot find search input",
                 10
         );
 
-        waitForElementPresent(
-                By.id("org.wikipedia:id/page_list_item_title"),
-                "No result found",
-                5
+        WebElement first_element = waitForElementPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container'][@index='0']//*[@resource-id='org.wikipedia:id/page_list_item_title']"),
+                "Cannot find element with 'Java' article",
+                10
         );
 
-        waitForElementAndClick(
-                By.id("org.wikipedia:id/search_close_btn"),
-                "Cannot find X to cancel search",
-                5
+        Assert.assertTrue("Element with Java substrings not found",
+                first_element.getAttribute("text")
+                        .toLowerCase()
+                        .contains(searchingText.toLowerCase()));
+
+        WebElement second_element = waitForElementPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container'][@index='1']//*[@resource-id='org.wikipedia:id/page_list_item_title']"),
+                "Cannot find element with 'Java' article",
+                10
         );
 
-        waitForElementPresent(
-                By.id("org.wikipedia:id/search_empty_message"),
-                "Search results screen was not cleared",
-                5
+        Assert.assertTrue("Element with Java substrings not found",
+                second_element.getAttribute("text")
+                        .toLowerCase()
+                        .contains(searchingText.toLowerCase()));
+
+        WebElement third_element = waitForElementPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container'][@index='2']//*[@resource-id='org.wikipedia:id/page_list_item_title']"),
+                "Cannot find element with 'Java' article",
+                10
         );
+
+        Assert.assertTrue("Element with Java substrings not found",
+                third_element.getAttribute("text")
+                        .toLowerCase()
+                        .contains(searchingText.toLowerCase()));
     }
 
     private WebElement waitForElementPresent(By by, String error_massage, long timeoutInSeconds) {
